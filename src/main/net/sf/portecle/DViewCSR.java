@@ -173,7 +173,7 @@ class DViewCSR
 		// TODO: attributes, requested extensions
 		
 		// Extensions
-		m_jbExtensions = new JButton(RB.getString("DViewCSR.m_jbExtensions.text"));
+		JButton m_jbExtensions = new JButton(RB.getString("DViewCSR.m_jbExtensions.text"));
 
 		m_jbExtensions.setMnemonic(RB.getString("DViewCSR.m_jbExtensions.mnemonic").charAt(0));
 		m_jbExtensions.setToolTipText(RB.getString("DViewCSR.m_jbExtensions.tooltip"));
@@ -220,8 +220,6 @@ class DViewCSR
 		jpCSR.add(m_jtfPublicKey, gbc_jtfPublicKey);
 		jpCSR.add(jlSignatureAlgorithm, gbc_jlSignatureAlgorithm);
 		jpCSR.add(m_jtfSignatureAlgorithm, gbc_jtfSignatureAlgorithm);
-	        jpCSR.add(jlSubjectAlternateName, gbc_jlSubjectAlternateName);
-		jpCSR.add(m_jtfSubjectAlternateName, gbc_jtfSubjectAlternateName);
 		jpCSR.add(jpButtons, gbc_jpButtons);
 
 		// Populate the dialog with the first certificate (if any)
@@ -300,9 +298,9 @@ class DViewCSR
 	{
 		try
 		{
-			DViewExtensions dViewExtensions = new DViewExtensions(this, RB.getString("DViewCSR.Extensions.Title"), true, m_req);
-			dViewExtensions.setLocationRelativeTo(this);
-			SwingHelper.showAndWait(dViewExtensions);
+			//DViewExtensions dViewExtensions = new DViewExtensions(this, RB.getString("DViewCSR.Extensions.Title"), true, m_req);
+			//dViewExtensions.setLocationRelativeTo(this);
+			//SwingHelper.showAndWait(dViewExtensions);
 		}
 		catch (CryptoException ex)
 		{
