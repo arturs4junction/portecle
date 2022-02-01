@@ -30,7 +30,9 @@ jobs:
         with:
           java-version: 8
       - name: version
-        run: echo "::set-output name=version::$(./deploy/portecle --version)"
+        with:
+          xpath-query: string(/project/property[@name="version"]/@value)
+        run: echo "::set-output name=version::$(xmllint --xpath ${{ xpath-query }} build.xml )"
         id: version
       - name: build artifacts
         run: ant all
@@ -50,6 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./deploy/portecle.zip
-          asset_name: portecle.zip
+          asset_path: ./dist/portecle-${{ steps.version.outputs.version }}.zip
+          asset_name: portecle-${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
