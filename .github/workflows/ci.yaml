@@ -17,17 +17,40 @@ jobs:
                desktop-file-utils libxml2-utils
           desktop-file-validate src/etc/net.sf.portecle.desktop
           xmllint --html --noout doc/*.html
-  build:
+  build_release:
+    name: build_release
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        # TODO: 7; ant is built with 8 and won't run with it
-        java-version: [8, 9, 10, 11, 12, 13, 14, 15]
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
         with:
           lfs: true
-      - uses: actions/setup-java@v1
+      - name: build
+        uses: actions/setup-java@v1
         with:
-          java-version: ${{matrix.java-version}}
-      - run: ant all
+          java-version: 8
+      - name: version
+        run: echo "::set-output name=version::$(./deploy/portecle --version)"
+        id: version
+      - name: build artifacts
+        run: ant all
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./deploy/portecle.zip
+          asset_name: portecle.zip
+          asset_content_type: application/zip
