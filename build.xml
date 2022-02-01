@@ -30,8 +30,8 @@
 
   <property name="build.debug" value="true" />
   <property name="build.debuglevel" value="lines,source" />
-  <property name="build.srcver" value="1.7" />
-  <property name="build.targetver" value="1.7" />
+  <property name="build.srcver" value="8" />
+  <property name="build.targetver" value="8" />
   <property name="build.encoding" value="UTF-8" />
 
   <property name="apiurl.java" value="https://docs.oracle.com/javase/7/docs/api/"/>
