@@ -748,7 +748,7 @@ public final class X509CertUtil
 
 			return csr;
 		}
-		catch (OperatorCreationException | PKCSException ex)
+		catch (OperatorCreationException | PKCSException | IOException ex)
 		{
 			throw new CryptoException(RB.getString("NoGenerateCsr.exception.message"), ex);
 		}
