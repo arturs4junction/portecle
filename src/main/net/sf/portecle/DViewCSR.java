@@ -75,6 +75,9 @@ class DViewCSR
 
 	/** Certificate Signature Algorithm text field */
 	private JTextField m_jtfSignatureAlgorithm;
+	
+	/** Certificate Subject Alternate Name text field */
+	private JTextField m_jtfSubjectAlternateName;
 
 	/** Stores request to display */
 	private final PKCS10CertificationRequest m_req;
@@ -170,6 +173,18 @@ class DViewCSR
 		gbc_jtfSignatureAlgorithm.gridy = 7;
 
 		// TODO: attributes, requested extensions
+		
+		// Subject Alternate Name
+		JLabel jlSubjectAlternateName = new JLabel(RB.getString("DViewCSR.jlSubjectAlternateName.text"));
+		GridBagConstraints gbc_jlSubjectAlternateName = (GridBagConstraints) gbcLbl.clone();
+		gbc_jlSubjectAlternateName.gridy = 8;
+
+		m_jtfSubjectAlternateName = new JTextField(36);
+		m_jtfSubjectAlternateName.setEditable(false);
+		m_jtfSubjectAlternateName.setToolTipText(RB.getString("DViewCSR.m_jtfSubjectAlternateName.tooltip"));
+		jlSubjectAlternateName.setLabelFor(m_jtfSubjectAlternateName);
+		GridBagConstraints gbc_jtfSubjectAlternateName = (GridBagConstraints) gbcTf.clone();
+		gbc_jtfSubjectAlternateName.gridy = 8;
 
 		// PEM Encoding
 		JButton jbPemEncoding = new JButton(RB.getString("DViewCSR.jbPemEncoding.text"));
@@ -205,6 +220,8 @@ class DViewCSR
 		jpCSR.add(m_jtfPublicKey, gbc_jtfPublicKey);
 		jpCSR.add(jlSignatureAlgorithm, gbc_jlSignatureAlgorithm);
 		jpCSR.add(m_jtfSignatureAlgorithm, gbc_jtfSignatureAlgorithm);
+	        jpCSR.add(jlSubjectAlternateName, gbc_jlSubjectAlternateName);
+		jpCSR.add(m_jtfSubjectAlternateName, gbc_jtfSubjectAlternateName);
 		jpCSR.add(jpButtons, gbc_jpButtons);
 
 		// Populate the dialog with the first certificate (if any)
@@ -274,6 +291,14 @@ class DViewCSR
 		m_jtfSignatureAlgorithm.setCaretPosition(0);
 
 		// TODO: attributes, requested extensions
+		
+		// Subject Alternate Name
+		AttributeSet attrs = m_req.getAttributes().getAttribute("2.5.29.17");
+		if(attrs != null)
+		{
+			m_jtfSubjectAlternateName.setText(attrs[0].toString());
+			m_jtfSubjectAlternateName.setCaretPosition(0);
+		}
 	}
 
 	/**
