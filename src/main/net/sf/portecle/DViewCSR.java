@@ -44,6 +44,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.text.AttributeSet;
 
+import org.bouncycastle.asn1.x509.Attribute;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
@@ -294,11 +295,19 @@ class DViewCSR
 		// TODO: attributes, requested extensions
 		
 		// Subject Alternate Name
-		AttributeSet attrs = m_req.getAttributes().getAttribute("2.5.29.17");
-		if(attrs != null)
-		{
-			m_jtfSubjectAlternateName.setText(attrs[0].toString());
-			m_jtfSubjectAlternateName.setCaretPosition(0);
+		Attribute[] attrs = m_req.getAttributes();
+		for (int i = 0; i < attribs.length; i++)
+	        {
+			if(attrs[i].getAttrType().equals("2.5.29.17"))
+			{
+				String sanValue = attrs[i].getAttributeValues()
+					.stream()
+					.map(Object::toString)
+					.collect(Collectors.joining(", "));
+					
+				m_jtfSubjectAlternateName.setText(sanValue);
+				m_jtfSubjectAlternateName.setCaretPosition(0);
+			}
 		}
 	}
 
