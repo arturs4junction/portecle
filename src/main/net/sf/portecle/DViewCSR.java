@@ -296,16 +296,16 @@ class DViewCSR
 	 */
 	private void extensionsPressed()
 	{
-		try
+		/*try
 		{
-			//DViewExtensions dViewExtensions = new DViewExtensions(this, RB.getString("DViewCSR.Extensions.Title"), true, m_req);
-			//dViewExtensions.setLocationRelativeTo(this);
-			//SwingHelper.showAndWait(dViewExtensions);
+			DViewExtensions dViewExtensions = new DViewExtensions(this, RB.getString("DViewCSR.Extensions.Title"), true, m_req);
+			dViewExtensions.setLocationRelativeTo(this);
+			SwingHelper.showAndWait(dViewExtensions);
 		}
 		catch (CryptoException ex)
 		{
 			DThrowable.showAndWait(this, null, ex);
-		}
+		}*/
 	}
 
 	/**
