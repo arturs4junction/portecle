@@ -300,15 +300,19 @@ class DViewCSR
 		Attribute[] attrs = m_req.getAttributes();
 		for (int i = 0; i < attrs.length; i++)
 	        {
+			
 			if(attrs[i].getAttrType().equals("2.5.29.17"))
 			{
 				String sanValue = Stream.of(attrs[i].getAttributeValues())
 					.map(Object::toString)
 					.collect(Collectors.joining(", "));
 					
-				m_jtfSubjectAlternateName.setText("There are: " + attrs.length + " attributes");
+				m_jtfSubjectAlternateName.setText(sanValue);
 				m_jtfSubjectAlternateName.setCaretPosition(0);
 			}
+			
+			m_jtfSubjectAlternateName.setText("There are: " + attrs.length + " attributes");
+			m_jtfSubjectAlternateName.setCaretPosition(0);
 		}
 	}
 
