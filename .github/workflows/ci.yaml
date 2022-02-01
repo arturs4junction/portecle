@@ -31,7 +31,7 @@ jobs:
           java-version: 8
       - name: version
         with:
-          xpath-query: string(/project/property[@name="version"]/@value)
+          xpath-query: 'string(/project/property[@name="version"]/@value)'
         run: echo "::set-output name=version::$(xmllint --xpath ${{ xpath-query }} build.xml )"
         id: version
       - name: build artifacts
