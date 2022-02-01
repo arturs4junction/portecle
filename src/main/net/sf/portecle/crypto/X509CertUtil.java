@@ -50,10 +50,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import javax.security.auth.x500.X500Principal;
 
+import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.pkcs.Attribute;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -74,7 +76,6 @@ import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
-import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 import net.sf.portecle.NetUtil;
 
@@ -733,7 +734,8 @@ public final class X509CertUtil
 			ContentVerifierProvider prov = new JcaContentVerifierProviderBuilder().build(cert);
 						
 			// Add Subject Alternative Names
-			Collection sans = X509ExtensionUtil.getSubjectAlternativeNames(cert);
+			byte[] sanBytes = cert.getExtensionValue(Extension.subjectAlternativeName.getId());
+			ASN1Primitive sans = (new ASN1InputStream(new ByteArrayInputStream(sanBytes))).readObject();
 			csrBuilder.addAttribute(Extension.subjectAlternativeName, sans);
 			
 			PKCS10CertificationRequest csr = csrBuilder.build(signerBuilder.build(privateKey));
