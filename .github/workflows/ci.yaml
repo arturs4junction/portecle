@@ -21,6 +21,11 @@ jobs:
     name: build_release
     runs-on: ubuntu-latest
     steps:
+      - name: apt-get
+        run: |
+          set -x
+          sudo apt-get -yq update
+          sudo apt-get -yq --no-install-recommends install libxml2-utils
       - name: checkout
         uses: actions/checkout@v2
         with:
