@@ -74,6 +74,7 @@ import org.bouncycastle.operator.jcajce.JcaContentVerifierProviderBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCSException;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
+import org.bouncycastle.x509.extension.X509ExtensionUtil;
 
 import net.sf.portecle.NetUtil;
 
@@ -730,13 +731,10 @@ public final class X509CertUtil
 		try
 		{
 			ContentVerifierProvider prov = new JcaContentVerifierProviderBuilder().build(cert);
-			
-			Attribute[] attrs = cert.getAttributes();
-			for (int i = 0; i < attrs.length; i++)
-	        	{
-				csrBuilder.setAttribute(attrs[i].getAttrType(), attrs[i].getAttributeValues());
-			}
-				
+						
+			// Add Subject Alternative Names
+			Collection sans = X509ExtensionUtil.getSubjectAlternativeNames(cert);
+			csrBuilder.addAttribute(Extension.subjectAlternativeName, sans);
 			
 			PKCS10CertificationRequest csr = csrBuilder.build(signerBuilder.build(privateKey));
 
