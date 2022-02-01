@@ -34,6 +34,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -301,9 +302,8 @@ class DViewCSR
 	        {
 			if(attrs[i].getAttrType().equals("2.5.29.17"))
 			{
-				String sanValue = attrs[i].getAttributeValues()
-					.stream()
-					.map(Object::toString)
+				String sanValue = Stream.of(attrs[i].getAttributeValues())
+					.map(e => e.toString())
 					.collect(Collectors.joining(", "));
 					
 				m_jtfSubjectAlternateName.setText(sanValue);
