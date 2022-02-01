@@ -306,7 +306,7 @@ class DViewCSR
 					.map(Object::toString)
 					.collect(Collectors.joining(", "));
 					
-				m_jtfSubjectAlternateName.setText(attrs.length);
+				m_jtfSubjectAlternateName.setText("There are: " + attrs.length + " attributes");
 				m_jtfSubjectAlternateName.setCaretPosition(0);
 			}
 		}
