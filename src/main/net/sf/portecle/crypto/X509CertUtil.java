@@ -55,6 +55,7 @@ import java.util.Set;
 import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.pkcs.Attribute;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -723,12 +724,20 @@ public final class X509CertUtil
 		X500Name subject = new X500Name(cert.getSubjectDN().toString());
 
 		JcaPKCS10CertificationRequestBuilder csrBuilder =
-		    new JcaPKCS10CertificationRequestBuilder(subject, cert.getPublicKey());
+		    new JcaPKCS10CertificationRequestBuilder(subject, cert.getPublicKey());		
 		JcaContentSignerBuilder signerBuilder = new JcaContentSignerBuilder(cert.getSigAlgName());
 
 		try
 		{
 			ContentVerifierProvider prov = new JcaContentVerifierProviderBuilder().build(cert);
+			
+			Attribute[] attrs = cert.getAttributes();
+			for (int i = 0; i < attrs.length; i++)
+	        	{
+				csrBuilder.setAttribute(attrs[i].getAttrType(), attrs[i].getAttributeValues());
+			}
+				
+			
 			PKCS10CertificationRequest csr = csrBuilder.build(signerBuilder.build(privateKey));
 
 			if (!csr.isSignatureValid(prov))
