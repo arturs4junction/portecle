@@ -30,7 +30,12 @@ jobs:
         with:
           java-version: 8
       - name: version
-        run: echo "::set-output name=version::$(xmllint --xpath 'string(/project/property[@name=\"version\"]/@value)' build.xml )"
+        uses: QwerMike/xpath-action@v1
+        with:
+          # The path to HTML or XML document
+          filename: build.xml
+          # XPath 1.0 expression
+          expression: string(/project/property[@name='version']/@value)
         id: version
       - name: build artifacts
         run: ant all
