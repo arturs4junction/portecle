@@ -33,8 +33,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -46,7 +44,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.text.AttributeSet;
 
-import org.bouncycastle.asn1.pkcs.Attribute;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
@@ -80,9 +77,6 @@ class DViewCSR
 	/** Certificate Signature Algorithm text field */
 	private JTextField m_jtfSignatureAlgorithm;
 	
-	/** Certificate Subject Alternate Name text field */
-	private JTextField m_jtfSubjectAlternateName;
-
 	/** Stores request to display */
 	private final PKCS10CertificationRequest m_req;
 
@@ -178,17 +172,19 @@ class DViewCSR
 
 		// TODO: attributes, requested extensions
 		
-		// Subject Alternate Name
-		JLabel jlSubjectAlternateName = new JLabel(RB.getString("DViewCSR.jlSubjectAlternateName.text"));
-		GridBagConstraints gbc_jlSubjectAlternateName = (GridBagConstraints) gbcLbl.clone();
-		gbc_jlSubjectAlternateName.gridy = 8;
+		// Extensions
+		m_jbExtensions = new JButton(RB.getString("DViewCSR.m_jbExtensions.text"));
 
-		m_jtfSubjectAlternateName = new JTextField(36);
-		m_jtfSubjectAlternateName.setEditable(false);
-		m_jtfSubjectAlternateName.setToolTipText(RB.getString("DViewCSR.m_jtfSubjectAlternateName.tooltip"));
-		jlSubjectAlternateName.setLabelFor(m_jtfSubjectAlternateName);
-		GridBagConstraints gbc_jtfSubjectAlternateName = (GridBagConstraints) gbcTf.clone();
-		gbc_jtfSubjectAlternateName.gridy = 8;
+		m_jbExtensions.setMnemonic(RB.getString("DViewCSR.m_jbExtensions.mnemonic").charAt(0));
+		m_jbExtensions.setToolTipText(RB.getString("DViewCSR.m_jbExtensions.tooltip"));
+		m_jbExtensions.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent evt)
+			{
+				extensionsPressed();
+			}
+		});
 
 		// PEM Encoding
 		JButton jbPemEncoding = new JButton(RB.getString("DViewCSR.jbPemEncoding.text"));
@@ -295,24 +291,22 @@ class DViewCSR
 		m_jtfSignatureAlgorithm.setCaretPosition(0);
 
 		// TODO: attributes, requested extensions
-		
-		// Subject Alternate Name
-		Attribute[] attrs = m_req.getAttributes();
-		for (int i = 0; i < attrs.length; i++)
-	        {
-			
-			if(attrs[i].getAttrType().equals("2.5.29.17"))
-			{
-				String sanValue = Stream.of(attrs[i].getAttributeValues())
-					.map(Object::toString)
-					.collect(Collectors.joining(", "));
-					
-				m_jtfSubjectAlternateName.setText(sanValue);
-				m_jtfSubjectAlternateName.setCaretPosition(0);
-			}
-			
-			m_jtfSubjectAlternateName.setText("There are: " + attrs.length + " attributes");
-			m_jtfSubjectAlternateName.setCaretPosition(0);
+	}
+	
+	/**
+	 * Extensions button pressed or otherwise activated. Show the extensions of the currently selected certificate.
+	 */
+	private void extensionsPressed()
+	{
+		try
+		{
+			DViewExtensions dViewExtensions = new DViewExtensions(this, RB.getString("DViewCSR.Extensions.Title"), true, m_req);
+			dViewExtensions.setLocationRelativeTo(this);
+			SwingHelper.showAndWait(dViewExtensions);
+		}
+		catch (CryptoException ex)
+		{
+			DThrowable.showAndWait(this, null, ex);
 		}
 	}
 
