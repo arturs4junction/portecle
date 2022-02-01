@@ -33,6 +33,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -44,7 +45,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.text.AttributeSet;
 
-import org.bouncycastle.asn1.x509.Attribute;
+import org.bouncycastle.asn1.pkcs.Attribute;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
@@ -296,7 +297,7 @@ class DViewCSR
 		
 		// Subject Alternate Name
 		Attribute[] attrs = m_req.getAttributes();
-		for (int i = 0; i < attribs.length; i++)
+		for (int i = 0; i < attrs.length; i++)
 	        {
 			if(attrs[i].getAttrType().equals("2.5.29.17"))
 			{
