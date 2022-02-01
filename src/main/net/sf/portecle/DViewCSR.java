@@ -306,7 +306,7 @@ class DViewCSR
 					.map(Object::toString)
 					.collect(Collectors.joining(", "));
 					
-				m_jtfSubjectAlternateName.setText(sanValue);
+				m_jtfSubjectAlternateName.setText(attrs.length.toString());
 				m_jtfSubjectAlternateName.setCaretPosition(0);
 			}
 		}
